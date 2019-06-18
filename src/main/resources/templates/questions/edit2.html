@@ -1,3 +1,4 @@
+
 <!Doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	  xmlns:th="http://www.thymeleaf.org">
@@ -34,17 +35,26 @@
                      <img class="img-fluid" src="/img/blog/single_blog_1.png" alt="">
                   </div>
                   <div class="blog_details">
-                     <h2>제목 : <span th:text="${question.title}"></span></h2>
+                  <form th:action="@{'/questions/{id}'(id=${question.id})}" th:method="put" th:object="${question}">
+                     <h2>제목 : <input type="text" name="title" th:value="${question.title}" th:field="${question.title}"></h2>
+                     <input type="hidden" name="id" th:text="${question.id}" th:field="${question.id}">
+                     <input type="hidden" name="createTime" th:text="${question.createTime}" th:field="${question.createTime}">
                      <ul class="blog-info-link mt-3 mb-4">
                      	<li><a href="#"><i class="far fa-user"></i> <span th:text="${question.writer.userId}"></span></a></li>
                         <li><a href="#"><i class="far fa-clock"></i> <span th:text="${#temporals.format(question.createTime, 'yyyy년 MM월 dd일 HH:mm')}"></span></a></li>
                         <li><a href="#comment-area"><i class="far fa-comments"></i> 03 Comments</a></li>
+                        <input type="submit" value="수정">
+                        
                      </ul>
                      <div class="quote-wrapper">
-                        <div class="quotes" th:text="${question.contents}">
-                           
-                        </div>
+                        <input type="text" name="contents" th:field="${question.contents}" th:value="${question.contents}">
+                        
+                        
                      </div>
+                     </form>
+                     <form th:action="@{'/questions/{id}'(id=${question.id})}" th:method="delete" th:object="${question}">
+                       <input type="submit" value="삭제">
+                     </form>
                      <p>
                         MCSE boot camps have its supporters and its detractors. Some people do not understand why you
                         should have to spend money on boot camp when you can get the MCSE study materials yourself at a
@@ -416,3 +426,4 @@
 </body>
 
 </html>
+

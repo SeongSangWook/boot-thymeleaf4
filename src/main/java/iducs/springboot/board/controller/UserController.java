@@ -32,11 +32,16 @@ public class UserController {
 	public String createUser(@Valid User formUser, Model model) {
 		userService.saveUser(formUser); 
 		model.addAttribute("user", formUser);
-		return "redirect:/users";
+		return "/users/welcome";
 	}	
 	@GetMapping("")
 	public String getAllUser(Model model, HttpSession session) {
 		model.addAttribute("users", userService.getUsers());
+		
+		if(session.getAttribute("user") == null) {
+			System.out.println("id error : ");
+			return "redirect:/users/login-form";
+		}
 		return "/users/list";
 	}	
 	@GetMapping("/{id}")

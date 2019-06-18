@@ -42,11 +42,30 @@ public class QuestionServiceImpl implements QuestionService {
 		}
 		return questions;			
 	}
-
+	@Override
+	public List<Question> getQuestionsByTitle(String title) {
+		// TODO Auto-generated method stub
+		List<QuestionEntity> entities = repository.findAll(new Sort(Sort.Direction.ASC, "title"));
+		
+		List<Question> questions = new ArrayList<Question>();
+		for(QuestionEntity entity : entities) {
+			Question question = entity.buildDomain();
+			questions.add(question);
+		}
+		return questions;	
+	}
+	
 	@Override
 	public List<Question> getQuestionsByUser(String name) {
 		// TODO Auto-generated method stub
-		return null;
+		List<QuestionEntity> entities = repository.findAll(new Sort(Sort.Direction.ASC, "writer"));
+		
+		List<Question> questions = new ArrayList<Question>();
+		for(QuestionEntity entity : entities) {
+			Question question = entity.buildDomain();
+			questions.add(question);
+		}
+		return questions;	
 	}
 
 	@Override
