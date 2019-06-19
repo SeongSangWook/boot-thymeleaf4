@@ -38,7 +38,7 @@ public class QuerstionController {
 		model.addAttribute("questions", questions);
 		return "/questions/list"; 
 	}	
-	
+	//제목 기준 정렬
 	@GetMapping("/title")
 	public String getAllUserByTitle(Model model, HttpSession session, String title) {
 		List<Question> questions = questionService.getQuestionsByTitle(title);
@@ -46,7 +46,7 @@ public class QuerstionController {
 		return "/questions/list"; 
 	}	
 	
-	@PostMapping("")
+	@PostMapping("") 
 	// public String createUser(Question question, Model model, HttpSession session) {
 	public String createUser(String title, String contents, Model model, HttpSession session) {
 		User sessionUser = (User) session.getAttribute("user");
@@ -55,7 +55,7 @@ public class QuerstionController {
 		questionService.saveQuestion(newQuestion);
 		return "redirect:/questions"; // get 방식으로  리다이렉션 - Controller를 통해 접근
 	}
-	
+	// 본인것만 수정 삭제 가능하도록 비교
 	@GetMapping("/{id}")
 	public String getQuestionById(@PathVariable(value = "id") Long id, Model model, HttpSession session) {
 		User sessionUser = (User)session.getAttribute("user");

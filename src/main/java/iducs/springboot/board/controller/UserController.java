@@ -1,5 +1,7 @@
 package iducs.springboot.board.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import iducs.springboot.board.domain.Question;
 import iducs.springboot.board.domain.User;
 import iducs.springboot.board.exception.ResourceNotFoundException;
 import iducs.springboot.board.repository.UserRepository;
@@ -34,7 +37,7 @@ public class UserController {
 		model.addAttribute("user", formUser);
 		return "/users/welcome";
 	}	
-	@GetMapping("")
+	@GetMapping("") //사용자목록 출력, 로그인 아닐 시 로그인 폼으로 이동
 	public String getAllUser(Model model, HttpSession session) {
 		model.addAttribute("users", userService.getUsers());
 		
@@ -44,7 +47,19 @@ public class UserController {
 		}
 		return "/users/list";
 	}	
-	@GetMapping("/{id}")
+	
+	@GetMapping("/name")	//사용자목록 출력, 이름 기준 정렬
+	public String getUsersByName(Model model, HttpSession session, String name) {
+		if(session.getAttribute("user") == null) {
+			System.out.println("id error : ");
+			return "redirect:/users/login-form";
+		}
+		List<User> users = userService.getUsersByName(name);
+		model.addAttribute("users", users);
+		return "/users/list"; 
+	}	
+	
+	@GetMapping("/{id}") //로그인 한 사용자 정보 보기
 	public String getUserById(@PathVariable(value = "id") Long id, Model model) {
 		User user = userService.getUserById(id);
 		model.addAttribute("user", user);
@@ -66,7 +81,7 @@ public class UserController {
 	public String deleteUserById(@PathVariable(value = "id") Long id, @Valid User formUser, Model model) {
 		userService.deleteUser(formUser);
 		model.addAttribute("name", formUser.getName());
-		return "/users/withdrawal";
+		return "redirect:/users";
 	}
 	
 	/*

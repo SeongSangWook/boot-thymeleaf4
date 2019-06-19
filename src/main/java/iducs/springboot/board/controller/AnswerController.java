@@ -1,5 +1,7 @@
 package iducs.springboot.board.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,11 +30,19 @@ public class AnswerController {
 	@Autowired AnswerService answerService; // 의존성 주입(Dependency Injection) 
 	@Autowired QuestionService questionService;
 		
+	
+	@GetMapping("")
+	public String getAllUser(Model model, HttpSession session) {
+		List<Answer> answers = answerService.getAnswers();
+		model.addAttribute("answers", answers);
+		return "/questions/list"; 
+	}	
+	
 	@PostMapping("")
 	// public String createUser(Answer answer, Model model, HttpSession session) {
 	public String createAnswer(@PathVariable Long questionId, String contents,HttpSession session) {
-		User sessionUser = (User) session.getAttribute("user");
-		Question question = questionService.getQuestionById(questionId);
+		User sessionUser = (User) session.getAttribute("user"); //세션유저받아옴
+		Question question = questionService.getQuestionById(questionId); //질문자이이디 받아옴
 		Answer newAnswer = new Answer(sessionUser, question, contents);
 		answerService.saveAnswer(newAnswer);
 		return String.format("redirect:/questions/%d", questionId);

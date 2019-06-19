@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import iducs.springboot.board.domain.Question;
 import iducs.springboot.board.domain.User;
+import iducs.springboot.board.entity.QuestionEntity;
 import iducs.springboot.board.entity.UserEntity;
 import iducs.springboot.board.exception.ResourceNotFoundException;
 import iducs.springboot.board.repository.UserRepository;
@@ -15,7 +18,7 @@ import iducs.springboot.board.repository.UserRepository;
 public class UserServiceImpl implements UserService {
 
 	@Autowired UserRepository repository;
-
+	//id순서
 	@Override
 	public User getUserById(long id) {
 		UserEntity userEntity = null;
@@ -47,11 +50,17 @@ public class UserServiceImpl implements UserService {
 		}
 		return users;
 	}
-
+	// 이름기준 오름차순 정렬
 	@Override
-	public List<User> getUsersByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> getUsersByName(String name) { 
+		List<UserEntity> entities = repository.findAll(new Sort(Sort.Direction.ASC, "name"));
+		
+		List<User> users = new ArrayList<User>();
+		for(UserEntity entity : entities) {
+			User user = entity.buildDomain();
+			users.add(user);
+		}
+		return users;	
 	}
 
 	@Override

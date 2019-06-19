@@ -23,7 +23,7 @@ public class AnswerEntity {
 	@ManyToOne
 	@JoinColumn(name="fk_answer_writer")
 	private UserEntity writer;
-	
+	//1대다 
 	@ManyToOne
 	@JoinColumn(name="fk_answer_question")
 	private QuestionEntity question;
