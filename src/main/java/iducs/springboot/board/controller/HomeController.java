@@ -9,9 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import iducs.springboot.board.domain.Question;
+import iducs.springboot.board.domain.Board;
 import iducs.springboot.board.domain.User;
-import iducs.springboot.board.service.QuestionService;
+import iducs.springboot.board.service.BoardService;
 import iducs.springboot.board.service.UserService;
 import iducs.springboot.board.utils.HttpSessionUtils;
 
@@ -20,14 +20,14 @@ public class HomeController {
 	
 	@Autowired UserService userService; // 의존성 주입(Dependency Injection) : 
 	@Autowired 
-	private QuestionService questionService;
+	private BoardService questionService;
 	@GetMapping("/initdb") 
 	public String initialize() {
 		for(int i = 1;i <= 10; i++)
 			userService.saveUser(new User("u" + i, "p" + i, "name" + i, "contact" + i));	
 		for(int i = 1;i <= 5; i++) {
 			for(int j = 1; j <= 2; j++)
-			questionService.saveQuestion(new Question("제목 " + j, userService.getUserByUserId("u"+i) , "내용 " + j));
+			questionService.saveQuestion(new Board("제목 " + j, userService.getUserByUserId("u"+i) , "내용 " + j));
 		}
 		return "index";
 	}
@@ -60,7 +60,7 @@ public class HomeController {
 			return "redirect:/users/login-form";
 		}
 		session.setAttribute("user", sessionUser);
-		return "redirect:/";
+		return "redirect:/questions";
 	}	
 	
 	@GetMapping("/users/form") // 등록폼은 form URL을 가지도록 함, 다른 폼은 이름을 명명하기로 수정함

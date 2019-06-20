@@ -3,7 +3,7 @@ package iducs.springboot.board.service;
 import java.util.List;
 
 import iducs.springboot.board.domain.Answer;
-import iducs.springboot.board.domain.Question;
+import iducs.springboot.board.domain.Board;
 
 public interface AnswerService {
 	Answer getAnswerById(long id); // primary key인 id 값을 가진 질문 조회

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import iducs.springboot.board.domain.Question;
+import iducs.springboot.board.domain.Board;
 import iducs.springboot.board.domain.User;
 import iducs.springboot.board.exception.ResourceNotFoundException;
 import iducs.springboot.board.repository.UserRepository;
@@ -37,10 +37,23 @@ public class UserController {
 		model.addAttribute("user", formUser);
 		return "/users/welcome";
 	}	
+	/*
 	@GetMapping("") //사용자목록 출력, 로그인 아닐 시 로그인 폼으로 이동
 	public String getAllUser(Model model, HttpSession session) {
 		model.addAttribute("users", userService.getUsers());
 		
+		if(session.getAttribute("user") == null) {
+			System.out.println("id error : ");
+			return "redirect:/users/login-form";
+		}
+		return "/users/list";
+	}	
+	*/
+	@GetMapping("")
+	public String getUsers(Model model, HttpSession session, Long pageNo) { //@PathVariable(value = "pageNo") Long pageNo) {
+		if(pageNo == null)
+			pageNo = new Long(1);
+		model.addAttribute("users", userService.getUsers(pageNo));
 		if(session.getAttribute("user") == null) {
 			System.out.println("id error : ");
 			return "redirect:/users/login-form";
@@ -54,6 +67,7 @@ public class UserController {
 			System.out.println("id error : ");
 			return "redirect:/users/login-form";
 		}
+		
 		List<User> users = userService.getUsersByName(name);
 		model.addAttribute("users", users);
 		return "/users/list"; 

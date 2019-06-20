@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,12 +17,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import iducs.springboot.board.domain.Question;
+import iducs.springboot.board.domain.Board;
 import iducs.springboot.board.domain.User;
 
 @Entity
-@Table(name = "question")
-public class QuestionEntity {
+@Table(name = "board")
+public class BoardEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id; // database에서 sequence number, primary key 역할
@@ -32,7 +33,7 @@ public class QuestionEntity {
 	@JoinColumn(name="fk_question_writer")
 	private UserEntity writer;	
 
-	@OneToMany(mappedBy="question")
+	@OneToMany(mappedBy="question", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	@OrderBy("createTime DESC")
 	private List<AnswerEntity> answers = new ArrayList<AnswerEntity>();
 	
@@ -80,8 +81,8 @@ public class QuestionEntity {
 	public void setCreateTime(LocalDateTime createTime) {
 		this.createTime = createTime;
 	}
-	public Question buildDomain() {
-		Question question = new Question();
+	public Board buildDomain() {
+		Board question = new Board();
 		question.setId(id);
 		question.setTitle(title);
 		question.setWriter(writer.buildDomain());
@@ -89,7 +90,7 @@ public class QuestionEntity {
 		question.setCreateTime(createTime);
 		return question;
 	}
-	public void buildEntity(Question question) {
+	public void buildEntity(Board question) {
 		UserEntity userEntity = new UserEntity();
 		userEntity.buildEntity(question.getWriter());
 		
